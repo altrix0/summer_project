@@ -1,13 +1,44 @@
 from tkinter import *
 import pygame
 from tkinter import filedialog
+import time
+from mutagen.mp3 import MP3
 
 root = Tk()
 root.title('Summer MP3 Player')
-root.geometry('500x300')
+root.geometry('500x350')
 
 # Initialize pygame mixer
 pygame.mixer.init()
+
+# Grab song length and time infi
+def play_time():
+	# Get current song elapsed time
+	current_time = pygame.mixer.music.get_pos() / 1000
+
+	# Conver to time format
+	converted_current_time = time.strftime('%M:%S', time.gmtime(current_time))
+
+	# Get the currently playing song
+	#current_song = list_box.curselection()
+	# Grab song title from playlist
+	song = list_box.get(ACTIVE)
+	# Add directory structure and mp3 to song name
+	song = f'C:/Users/ansha/Desktop/Summer_Project/gui/audio/{song}.mp3'
+	# Load song with mutagen
+	song_mut = MP3(song)
+	# Get song length
+	song_length = song_mut.info.length
+	# Convert to time format
+	converted_song_length = time.strftime('%M:%S', time.gmtime(song_length))
+
+
+	# Output time to status bar
+	status_bar.config(text=f'Time Elapsed: {converted_current_time}  of  {converted_song_length}  ')
+
+	# update time
+	status_bar.after(1000, play_time)
+
 
 
 # Add song function
@@ -40,10 +71,15 @@ def play():
 	pygame.mixer.music.load(song)
 	pygame.mixer.music.play(loops=0)
 
+	# call the play_time func. to get song length
+	play_time()
 # Stop playing current song
 def stop():
 	pygame.mixer.music.stop()
 	list_box.selection_clear(ACTIVE)
+
+	# Clear the status bar
+	status_bar.config(text='')
 
 # Play next song in the playlist
 def next_song():
@@ -165,6 +201,11 @@ remove_song_menu = Menu(my_menu)
 my_menu.add_cascade(label='Remove Songs', menu=remove_song_menu)
 remove_song_menu.add_command(label='Delete A Song From The Playlist', command=delete_song)
 remove_song_menu.add_command(label='Delete All Songs From The Playlist', command=delete_songs)
+
+# Create status bar
+status_bar = Label(root, text='', bd=1, relief=GROOVE, anchor=E)
+status_bar.pack(fill=X, side=BOTTOM, ipady=2)
+
 
 
 root.mainloop()
