@@ -3,13 +3,15 @@ import pygame
 from tkinter import filedialog
 import time
 from mutagen.mp3 import MP3
+import tkinter.ttk as ttk
 
 root = Tk()
 root.title('Summer MP3 Player')
-root.geometry('500x350')
+root.geometry('500x450')
 
 # Initialize pygame mixer
 pygame.mixer.init()
+
 
 # Grab song length and time infi
 def play_time():
@@ -28,6 +30,7 @@ def play_time():
 	# Load song with mutagen
 	song_mut = MP3(song)
 	# Get song length
+	global song_length
 	song_length = song_mut.info.length
 	# Convert to time format
 	converted_song_length = time.strftime('%M:%S', time.gmtime(song_length))
@@ -35,7 +38,9 @@ def play_time():
 
 	# Output time to status bar
 	status_bar.config(text=f'Time Elapsed: {converted_current_time}  of  {converted_song_length}  ')
-
+	
+	# Update slider position valur to current time position
+	my_slider.config(value=int(current_time))
 	# update time
 	status_bar.after(1000, play_time)
 
@@ -73,6 +78,10 @@ def play():
 
 	# call the play_time func. to get song length
 	play_time()
+
+	# update slider to position
+	slider_position = int(song_length)
+	my_slider.config(to=slider_position, value=0)
 # Stop playing current song
 def stop():
 	pygame.mixer.music.stop()
@@ -156,6 +165,11 @@ def pause(is_paused):
 		pygame.mixer.music.pause()
 		paused = True
 
+# Slider function
+def slide(x):
+	slider_label.config(text=f'{int(my_slider.get())} of {int(song_length)}')
+
+
 # Create playlist box
 list_box = Listbox(root, bg='black', fg='white', width=60, selectbackground="white", selectforeground="black")
 list_box.pack(pady=20)
@@ -206,6 +220,14 @@ remove_song_menu.add_command(label='Delete All Songs From The Playlist', command
 status_bar = Label(root, text='', bd=1, relief=GROOVE, anchor=E)
 status_bar.pack(fill=X, side=BOTTOM, ipady=2)
 
+
+# Slider
+my_slider = ttk.Scale(root, from_=0, to=100, orient=HORIZONTAL, value=0, command=slide, length=360)
+my_slider.pack(pady=30)
+
+# Create temp. slider lable
+slider_label = Label(root, text='0')
+slider_label.pack(pady=10)
 
 
 root.mainloop()
