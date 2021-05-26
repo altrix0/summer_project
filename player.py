@@ -41,7 +41,12 @@ def play_time():
 	# Increase current time by one second
 	current_time += 1
 
-	if int(my_slider.get()) == int(current_time):
+	if int(my_slider.get()) == int(song_length):
+		pass
+		status_bar.config(text=f'Time Elapsed: {converted_song_length}  ')
+
+
+	elif int(my_slider.get()) == int(current_time):
 		# update slider to position
 		slider_position = int(song_length)
 		my_slider.config(to=slider_position, value=int(current_time))
@@ -56,12 +61,15 @@ def play_time():
 		# Output time to status bar
 		status_bar.config(text=f'Time Elapsed: {converted_current_time}  of  {converted_song_length}  ')
 
+		# Move this thing along by one sec
+		next_time = int(my_slider.get()) + 1
+		my_slider.config(value=next_time)
 
 	# # Output time to status bar
 	# status_bar.config(text=f'Time Elapsed: {converted_current_time}  of  {converted_song_length}  ')
 	
 	# Update slider position valur to current time position
-	my_slider.config(value=int(current_time))
+	#my_slider.config(value=int(current_time))
 
 	
 
