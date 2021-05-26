@@ -1,1 +1,1 @@
-# Summer CS Project
+CS Summer Project
