@@ -111,7 +111,7 @@ def play():
 	# set stopped to false
 	global stopped
 	stopped = False
-	
+
 	song = list_box.get(ACTIVE)
 	song = f'C:/Users/ansha/Desktop/summer_project/gui/audio/{song}.mp3'
 
@@ -124,6 +124,11 @@ def play():
 	# # update slider to position
 	# slider_position = int(song_length)
 	# my_slider.config(to=slider_position, value=0)
+	
+	# Get current volume
+	# current_volume = pygame.mixer.music.get_volume()
+	# slider_label.config(text=int(current_volume * 100))
+
 # Stop playing current song
 global stopped
 stopped = False
@@ -237,9 +242,21 @@ def slide(x):
 	pygame.mixer.music.load(song)
 	pygame.mixer.music.play(loops=0, start=int(my_slider.get()))
 
+# Create Volume Function
+def volume(x):
+	pygame.mixer.music.set_volume(volume_slider.get())
+	
+	# Get current volume
+	# current_volume = pygame.mixer.music.get_volume()
+	# slider_label.config(text=int(current_volume * 100))
+
+# Create Master Frame
+master_frame = Frame(root)
+master_frame.pack(pady=20)
+
 # Create playlist box
-list_box = Listbox(root, bg='black', fg='white', width=60, selectbackground="white", selectforeground="black")
-list_box.pack(pady=20)
+list_box = Listbox(master_frame, bg='black', fg='white', width=60, selectbackground="white", selectforeground="black")
+list_box.grid(row=0, column=0)
 
 # Create player control buttons
 back_butn_img = PhotoImage(file='gui/images/back50.png')
@@ -249,8 +266,12 @@ pause_butn_img = PhotoImage(file='gui/images/pause50.png')
 stop_butn_img = PhotoImage(file='gui/images/stop50.png')
 
 # Create player control frame
-control_frame = Frame(root)
-control_frame.pack()
+control_frame = Frame(master_frame)
+control_frame.grid(row=1, column=0, pady=20)
+
+# Create volume label frame
+volume_frame = LabelFrame(master_frame, text='Volume')
+volume_frame.grid(row=0, column=1, padx=30)
 
 # Create player control buttons
 back_butn = Button(control_frame, image=back_butn_img, borderwidth=0,command=prev_song)
@@ -289,12 +310,16 @@ status_bar.pack(fill=X, side=BOTTOM, ipady=2)
 
 
 # Slider
-my_slider = ttk.Scale(root, from_=0, to=100, orient=HORIZONTAL, value=0, command=slide, length=360)
-my_slider.pack(pady=30)
+my_slider = ttk.Scale(master_frame, from_=0, to=100, orient=HORIZONTAL, value=0, command=slide, length=360)
+my_slider.grid(row=2, column=0, pady=10)
+
+# Create volume slider
+volume_slider = ttk.Scale(volume_frame, from_=0, to=1, orient=VERTICAL, value=1, command=volume, length=130)
+volume_slider.pack(pady=10)
 
 # Create temp. slider lable
-# slider_label = Label(root, text='0')
-# slider_label.pack(pady=10)
+slider_label = Label(root, text='0')
+slider_label.pack(pady=10)
 
 
 root.mainloop()
