@@ -311,7 +311,7 @@ add_song_menu.add_command(label="Add One Song To Playlist", command=add_song)
 # Add many songs to the playlist
 add_song_menu.add_command(label="Add Many Songs To Playlist", command=add_many_songs)
 
-# Create delete song mentu
+# Create delete song menu
 remove_song_menu = Menu(my_menu)
 my_menu.add_cascade(label='Remove Songs', menu=remove_song_menu)
 remove_song_menu.add_command(label='Delete A Song From The Playlist', command=delete_song)
