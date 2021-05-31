@@ -5,6 +5,7 @@ import time
 from mutagen.mp3 import MP3
 import tkinter.ttk as ttk
 
+# Create root frame
 root = Tk()
 root.title('MP3 Player')
 root.iconbitmap('C:/Users/ansha/Desktop/summer_project/gui/images/mp3.ico')
